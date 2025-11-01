@@ -1,6 +1,8 @@
 name:  Deployment_Container
 on: 
   push:
+    paths-ignore:
+      - '.github/workflows/*'
   workflow_dispatch:
 env:
   CACHE_KEY: node-deps
