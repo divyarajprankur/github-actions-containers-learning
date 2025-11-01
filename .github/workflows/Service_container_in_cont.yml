@@ -1,11 +1,9 @@
-name: Deployment_Container_MY
+name: Deployment_Container_in_Container
 on:
   push:
     branches:
       - main
       - dev
-    paths-ignore:
-      - '.github/workflows/*'
 env: 
   CACHE_KEY: node-deps
   MONGODB_DB_NAME: gha-demo
@@ -17,10 +15,16 @@ jobs:
       image: node:24
     env:
       MONGODB_CONNECTION_PROTOCOL: mongodb+srv
-      MONGODB_CLUSTER_ADDRESS: cluster0.hzm9asz.mongodb.net
+      MONGODB_CLUSTER_ADDRESS: my_mongodb
       MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
       MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
       PORT: 8080
+    services:
+      my_mongodb:
+        image: mongo
+        env:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: example
     steps:
       - name: Get Code
         uses: actions/checkout@v5
